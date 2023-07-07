@@ -5741,8 +5741,13 @@ module.exports.CreateMeshUser = function (parent, db, ws, req, args, domain, use
                         if (parent.db.changeStream) { event.noact = 1; } // If DB change stream is active, don't use this event to create the user. Another event will come.
                         parent.parent.DispatchEvent(targets, obj, event);
 
+                        // Perform email verification
+                        if (command.emailVerified == false && command.email && domain.mailserver) {
+                            domain.mailserver.sendAccountCheckMail(domain, newusername, newuser._id, command.email.toLowerCase(), parent.getLanguageCodes(req), req.query.key);
+                        }
+
                         // Perform email invitation
-                        if ((command.emailInvitation == true) && (command.emailVerified == true) && command.email && domain.mailserver) {
+                        if (command.emailInvitation == true && command.email && domain.mailserver) {
                             domain.mailserver.sendAccountInviteMail(newuserdomain, (user.realname ? user.realname : user.name), newusername, command.email.toLowerCase(), command.pass, parent.getLanguageCodes(req), req.query.key);
                         }
 
