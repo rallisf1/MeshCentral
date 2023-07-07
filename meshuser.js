@@ -3278,7 +3278,7 @@ module.exports.CreateMeshUser = function (parent, db, ws, req, args, domain, use
                             var ok = true, group2 = [];
                             if (common.validateString(command.tags, 0, 4096) == true) { command.tags = command.tags.split(','); }
                             for (var i in command.tags) { var tname = command.tags[i].trim(); if ((tname.length > 0) && (tname.length < 64) && (group2.indexOf(tname) == -1)) { group2.push(tname); } }
-                            group2.sort();
+                            //group2.sort();
                             if (node.tags != group2) { node.tags = group2; change = 1; }
                         } else if ((command.tags === '') && node.tags) { delete node.tags; change = 1; }
 
